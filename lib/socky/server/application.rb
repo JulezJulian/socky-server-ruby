@@ -2,7 +2,7 @@ module Socky
   module Server
     class Application
 
-      attr_accessor :name, :secret
+      attr_accessor :name, :secret, :webhook_url
 
       class << self
         # list of all known applications
