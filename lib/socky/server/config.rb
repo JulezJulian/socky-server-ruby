@@ -28,7 +28,11 @@ module Socky
         raise ArgumentError, 'expected Hash' unless arg.is_a?(Hash)
 
         arg.each do |app_name, options|
-          Socky::Server::Application.new(app_name.to_s, options['secret'], options['websocket_url'])
+          if options.is_a?(String)
+            Socky::Server::Application.new(app_name.to_s, options, nil)
+          else
+            Socky::Server::Application.new(app_name.to_s, options['secret'], options['websocket_url'])
+          end
         end
       end
 
