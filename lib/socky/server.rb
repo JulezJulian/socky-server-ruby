@@ -2,6 +2,7 @@ require 'rubygems'
 require 'json'
 require 'rack/websocket'
 require 'socky/authenticator'
+require 'em-http'
 
 # Socky is a WebSocket server and client for Ruby
 # @author Bernard "Imanel" Potocki
@@ -9,7 +10,7 @@ require 'socky/authenticator'
 module Socky
   module Server
     ROOT = File.expand_path(File.dirname(__FILE__))
-  
+
     autoload :Application,     "#{ROOT}/server/application"
     autoload :Channel,         "#{ROOT}/server/channel"
     autoload :Config,          "#{ROOT}/server/config"
