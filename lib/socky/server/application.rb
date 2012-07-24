@@ -55,7 +55,6 @@ module Socky
           digest = OpenSSL::Digest::SHA256.new
           hashed_data = OpenSSL::HMAC.hexdigest(digest, @secret, json_data)
 
-          puts('webhook triggered: ' + event + ': ' +  data.to_s)
           http = EventMachine::HttpRequest.new(@webhook_url).post body: json_data, head: { 'data-hash' => hashed_data }
       end
     end
