@@ -27,7 +27,6 @@ module Socky
         @name = name
         @secret = secret
         @webhook_url = webhook_url
-        puts 'name: ' + @name + ' secret: ' + @secret + ' webhook: ' + @webhook_url
         self.class.list[name] ||= self
       end
 
@@ -40,12 +39,14 @@ module Socky
       # add new connection to application
       # @param [Connection] connection connetion to add
       def add_connection(connection)
+        self.trigger_webhook('client_connected', { connection_id: connection.id })
         self.connections[connection.id] = connection
       end
 
       # remove connection from application
       # @param [Connection] connection connection to remove
       def remove_connection(connection)
+        self.trigger_webhook('client_disconnected', { connection_id: connection.id })
         self.connections.delete(connection.id)
       end
 
