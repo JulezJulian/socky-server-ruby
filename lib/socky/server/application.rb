@@ -55,7 +55,7 @@ module Socky
           digest = OpenSSL::Digest::SHA256.new
           hashed_data = OpenSSL::HMAC.hexdigest(digest, @secret, json_data)
 
-          http = EventMachine::HttpRequest.new(@webhook_url).post body: json_data, head: { 'data-hash' => hashed_data }
+          EventMachine::HttpRequest.new(@webhook_url).post body: json_data, head: { 'data-hash' => hashed_data } rescue InvalidURIError
       end
     end
   end
