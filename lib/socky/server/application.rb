@@ -51,7 +51,7 @@ module Socky
       def trigger_webhook(event, data)
           return if @webhook_url.nil?
 
-          json_data = { event: event, data: data, timestamp: Time.now.to_f.to_s.gsub('.', '') }.to_json
+          json_data = [ { event: event, data: data, timestamp: Time.now.to_f.to_s.gsub('.', '') } ].to_json
           digest = OpenSSL::Digest::SHA256.new
           hashed_data = OpenSSL::HMAC.hexdigest(digest, @secret, json_data)
 
