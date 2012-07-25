@@ -24,6 +24,8 @@ module Socky
       end
 
       def group(&block)
+        yield(self) and return if @collecting > 0
+
         events_to_send = []
         puts '3'
         @mutex.synchronize do
