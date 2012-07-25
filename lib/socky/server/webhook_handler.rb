@@ -26,7 +26,7 @@ module Socky
           return if @application.webhook_url.nil?
           return if @events.empty?
 
-          json_data = events.to_json
+          json_data = @events.to_json
           hash = sign_data(json_data)
 
           EventMachine::HttpRequest.new(@webhook_url).post body: json_data, head: { 'data-hash' => hash } rescue nil
