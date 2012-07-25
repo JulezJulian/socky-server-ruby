@@ -30,7 +30,7 @@ module Socky
           @collecting = @collecting + 1
           yield(self)
           @collecting = @collecting - 1
-          events_to_send = @events.copy
+          events_to_send = @events.dup
           @events.clear
         end
 puts '4'
