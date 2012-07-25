@@ -3,9 +3,10 @@ module Socky
     class WebhookHandler
 
       def initialize(application)
-      	@application = application
-      	@collecting = 0
-      	@events = []
+        @application = application
+        @collecting = 0
+        @events = []
+        @mutex = Mutex.new
       end
 
       def trigger(event, data)
@@ -15,10 +16,12 @@ module Socky
       end
 
       def group(&block)
-        @collecting = @collecting + 1
-        yield(self)
-        @collecting = @collecting - 1
-        send_data
+        @mutex.synchronize do
+          @collecting = @collecting + 1
+          yield(self)
+          @collecting = @collecting - 1
+          send_data
+        end
       end
 
       protected
