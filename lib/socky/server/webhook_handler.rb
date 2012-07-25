@@ -30,6 +30,7 @@ module Socky
         puts '3'
         @mutex.synchronize do
           @collecting = @collecting + 1
+          puts 'Collecting cnt: ' + @collecting
           yield(self)
           @collecting = @collecting - 1
           events_to_send = @events.dup
