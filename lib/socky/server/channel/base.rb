@@ -41,15 +41,19 @@ module Socky
         end
 
         def add_subscriber(connection, message, subscriber_data = nil)
-          @application.trigger_webhook('client_subscribed', { connection_id: connection.id, channel: self.name, data: subscriber_data })
-          @application.trigger_webhook('channel_occupied', { by: connection.id, channel: self.name }) if self.subscribers.count == 0
+          @application.webhook_handler.group do |handler|
+            handler.trigger('client_subscribed', { connection_id: connection.id, channel: self.name, data: subscriber_data })
+            handler.trigger('channel_occupied', { by: connection.id, channel: self.name }) if self.subscribers.count == 0
+          end
           self.subscribers[connection.id] = { 'connection' => connection, 'data' => subscriber_data }.merge( rights(message) )
           connection.channels[self.name] = self
         end
 
         def remove_subscriber(connection)
-          @application.trigger_webhook('client_unsubscribed', { connection_id: connection.id, channel: self.name })
-          @application.trigger_webhook('channel_vacated', { channel: self.name }) if self.subscribers.count == 1
+          @application.webhook_handler.group do |handler|
+            handler.trigger('client_unsubscribed', { connection_id: connection.id, channel: self.name })
+            handler.trigger('channel_vacated', { channel: self.name }) if self.subscribers.count == 1
+          end
           self.subscribers.delete(connection.id)
           connection.channels.delete(self.name)
         end

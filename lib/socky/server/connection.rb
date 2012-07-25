@@ -15,7 +15,7 @@ module Socky
         unless @application.nil?
           @id = self.generate_id
           @application.add_connection(self)
-          @application.trigger_webhook('client_connected', { connection_id: @id })
+          @application.webhook_handler.trigger('client_connected', { connection_id: @id })
         end
 
         self.send_data(initialization_status)
@@ -48,13 +48,19 @@ module Socky
       def destroy
         log('connection closing', @id)
         if @application
+            @application.webhook_handler.group do |handler|
+            self.channels.values.each do |channel|
+              channel.remove_subscriber(self)
+            end
+            handler.trigger_webhook('client_disconnected', { connection_id: @id })
+          end
           @application.remove_connection(self)
           @application = nil
+        else
+          self.channels.values.each do |channel|
+            channel.remove_subscriber(self)
+          end
         end
-        self.channels.values.each do |channel|
-          channel.remove_subscriber(self)
-        end
-        @application.trigger_webhook('client_disconnected', { connection_id: @id }) unless @application.nil?
       end
 
       # generate new id

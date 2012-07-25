@@ -21,5 +21,6 @@ module Socky
     autoload :Misc,            "#{ROOT}/server/misc"
     autoload :WebSocket,       "#{ROOT}/server/websocket"
     autoload :CachedJsonHash,  "#{ROOT}/server/cached_json_hash"
+    autoload :WebhookHandler,  "#{ROOT}/server/webhook_handler"
   end
 end

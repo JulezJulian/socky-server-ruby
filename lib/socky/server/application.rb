@@ -3,6 +3,7 @@ module Socky
     class Application
 
       attr_accessor :name, :secret, :webhook_url
+      attr_reader :webhook_handler
 
       class << self
         # list of all known applications
@@ -27,6 +28,7 @@ module Socky
         @name = name
         @secret = secret
         @webhook_url = webhook_url
+        @webhook_handler = WebhookHandler.new(self)
         self.class.list[name] ||= self
       end
 
@@ -48,15 +50,6 @@ module Socky
         self.connections.delete(connection.id)
       end
 
-      def trigger_webhook(event, data)
-          return if @webhook_url.nil?
-
-          json_data = [ { event: event, data: data, timestamp: Time.now.to_f.to_s.gsub('.', '') } ].to_json
-          digest = OpenSSL::Digest::SHA256.new
-          hashed_data = OpenSSL::HMAC.hexdigest(digest, @secret, json_data)
-
-          EventMachine::HttpRequest.new(@webhook_url).post body: json_data, head: { 'data-hash' => hashed_data } rescue nil
-      end
     end
   end
 end
