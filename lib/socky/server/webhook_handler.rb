@@ -4,7 +4,7 @@ module Socky
 
       def initialize(application)
         @application = application
-        @collecting = 0
+        @collecting = false
         @events = []
         @mutex = Mutex.new
       end
@@ -12,45 +12,35 @@ module Socky
       def trigger(event, data)
         event = { event: event, data: data, timestamp: Time.now.to_f.to_s.gsub('.', '') }
 
-        puts 'sending event: ' + event.to_json
-
-        if @collecting > 0
-          puts '6'
+        if @collecting
           @events << event
         else
-          puts '7'
           send_data([event])
         end
       end
 
       def group(&block)
-        yield(self) and return if @collecting > 0
+        yield(self) and return if @collecting
 
         events_to_send = []
-        puts '3'
+
         @mutex.synchronize do
-          @collecting = @collecting + 1
-          puts 'Collecting cnt: ' + @collecting.to_s
+          @collecting = true
           yield(self)
-          @collecting = @collecting - 1
+          @collecting = false
           events_to_send = @events.dup
           @events.clear
         end
-puts '4'
+
         send_data(events_to_send) unless events_to_send.empty?
       end
 
       protected
         def send_data(events)
-          puts '2'
           return if @application.webhook_url.nil?
-
-          puts '1'
 
           json_data = events.to_json
           hash = sign_data(json_data)
-
-          puts "sending data: " + json_data
 
           EventMachine::HttpRequest.new(@application.webhook_url).post body: json_data, head: { 'data-hash' => hash } rescue nil
         end
