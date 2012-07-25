@@ -54,7 +54,7 @@ module Socky
                   channel.remove_subscriber(self)
                 end
               end
-            handler.trigger_webhook('client_disconnected', { connection_id: @id })
+            handler.trigger('client_disconnected', { connection_id: @id })
           end
           @application.remove_connection(self)
           @application = nil
