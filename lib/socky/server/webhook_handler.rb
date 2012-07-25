@@ -12,9 +12,13 @@ module Socky
       def trigger(event, data)
         event = { event: event, data: data, timestamp: Time.now.to_f.to_s.gsub('.', '') }
 
+        puts 'sending event'
+
         if @collecting > 0
+          puts '6'
           @events << event
         else
+          puts '7'
           send_data([event])
         end
       end
