@@ -21,7 +21,7 @@ module Socky
 
       def group(&block)
         events_to_send = []
-
+        puts '3'
         @mutex.synchronize do
           @collecting = @collecting + 1
           yield(self)
@@ -29,13 +29,16 @@ module Socky
           events_to_send = @events
           @events.clear
         end
-
+puts '4'
         send_data(events_to_send) unless events_to_send.empty?
       end
 
       protected
         def send_data(events)
+          puts '2'
           return if @application.webhook_url.nil?
+
+          puts '1'
 
           json_data = events.to_json
           hash = sign_data(json_data)
