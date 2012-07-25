@@ -30,7 +30,7 @@ module Socky
           @events.clear
         end
 
-        send_data(events) unless events_to_send.empty?
+        send_data(events_to_send) unless events_to_send.empty?
       end
 
       protected
