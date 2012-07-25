@@ -12,7 +12,7 @@ module Socky
       def trigger(event, data)
         event = { event: event, data: data, timestamp: Time.now.to_f.to_s.gsub('.', '') }
 
-        puts 'sending event'
+        puts 'sending event: ' + event.to_json
 
         if @collecting > 0
           puts '6'
