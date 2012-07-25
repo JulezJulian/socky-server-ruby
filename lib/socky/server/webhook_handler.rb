@@ -10,31 +10,37 @@ module Socky
       end
 
       def trigger(event, data)
-          @events << { event: event, data: data, timestamp: Time.now.to_f.to_s.gsub('.', '') }
+        event = { event: event, data: data, timestamp: Time.now.to_f.to_s.gsub('.', '') }
 
-          send_data if @collecting == 0
+        if @collecting
+          @events << event
+        else
+          send_data([event])
+        end
       end
 
       def group(&block)
+        events_to_send = []
+
         @mutex.synchronize do
           @collecting = @collecting + 1
           yield(self)
           @collecting = @collecting - 1
-          send_data
+          events_to_send = @events
+          @events.clear
         end
+
+        send_data(events) unless events_to_send.empty?
       end
 
       protected
-        def send_data
+        def send_data(events)
           return if @application.webhook_url.nil?
-          return if @events.empty?
 
-          json_data = @events.to_json
+          json_data = events.to_json
           hash = sign_data(json_data)
 
           EventMachine::HttpRequest.new(@application.webhook_url).post body: json_data, head: { 'data-hash' => hash } rescue nil
-
-          @events.clear
         end
 
         def sign_data(data)
