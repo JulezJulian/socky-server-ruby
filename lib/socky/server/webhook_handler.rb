@@ -29,7 +29,7 @@ module Socky
           json_data = @events.to_json
           hash = sign_data(json_data)
 
-          EventMachine::HttpRequest.new(@webhook_url).post body: json_data, head: { 'data-hash' => hash } rescue nil
+          EventMachine::HttpRequest.new(@application.webhook_url).post body: json_data, head: { 'data-hash' => hash } rescue nil
 
           @events.clear
         end
