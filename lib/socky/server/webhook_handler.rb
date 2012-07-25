@@ -12,7 +12,7 @@ module Socky
       def trigger(event, data)
         event = { event: event, data: data, timestamp: Time.now.to_f.to_s.gsub('.', '') }
 
-        if @collecting
+        if @collecting > 0
           @events << event
         else
           send_data([event])
@@ -39,6 +39,8 @@ module Socky
 
           json_data = events.to_json
           hash = sign_data(json_data)
+
+          puts "sending data: " + json_data
 
           EventMachine::HttpRequest.new(@application.webhook_url).post body: json_data, head: { 'data-hash' => hash } rescue nil
         end
