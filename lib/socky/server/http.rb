@@ -23,7 +23,6 @@ module Socky
         @app_name = request.path.split('/').last
 
         check_app
-        puts @app.to_s
         check_channel
 
         check_timestamp
@@ -53,7 +52,7 @@ module Socky
       end
 
       def check_channel
-        error = ConnectionError.new 'No channel provided'
+        error = ConnectionError.new 'No channel provided' + @app.to_s
         error.status = 400
 
         raise error unless @params['channel']
