@@ -27,13 +27,15 @@ module Socky
         @mutex.synchronize do
           puts 'b' + @collecting.to_s
           @collecting = true
+          puts 'c' + @collecting.to_s
           yield(self)
+          puts 'd' + @collecting.to_s
           @collecting = false
           events_to_send = @events.dup
           @events.clear
-          puts 'c' + @collecting.to_s
+          puts 'e' + @collecting.to_s
         end
-        puts 'd' + @collecting.to_s
+        puts 'f' + @collecting.to_s
         send_data(events_to_send) unless events_to_send.empty?
       end
 
