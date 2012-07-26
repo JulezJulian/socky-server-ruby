@@ -21,26 +21,18 @@ module Socky
 
       def group(&block)
         if @collecting
-          puts 'x' + @collecting.to_s
           yield(self)
-          puts 'y' + @collecting.to_s
           return
         end
 
         events_to_send = []
-        puts 'a' + @collecting.to_s
         @mutex.synchronize do
-          puts 'b' + @collecting.to_s
           @collecting = true
-          puts 'c' + @collecting.to_s
           yield(self)
-          puts 'd' + @collecting.to_s
           @collecting = false
           events_to_send = @events.dup
           @events.clear
-          puts 'e' + @collecting.to_s
         end
-        puts 'f' + @collecting.to_s
         send_data(events_to_send) unless events_to_send.empty?
       end
 
