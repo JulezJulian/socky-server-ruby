@@ -20,7 +20,12 @@ module Socky
       end
 
       def group(&block)
-        yield(self) and return if @collecting
+        if @collecting
+          puts 'x' + @collecting.to_s
+          yield(self)
+          puts 'y' + @collecting.to_s
+          return
+        end
 
         events_to_send = []
         puts 'a' + @collecting.to_s
