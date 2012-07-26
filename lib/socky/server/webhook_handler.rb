@@ -23,15 +23,17 @@ module Socky
         yield(self) and return if @collecting
 
         events_to_send = []
-
+        puts 'a'
         @mutex.synchronize do
+          puts 'b'
           @collecting = true
           yield(self)
           @collecting = false
           events_to_send = @events.dup
           @events.clear
+          puts 'c'
         end
-
+        puts 'd'
         send_data(events_to_send) unless events_to_send.empty?
       end
 
