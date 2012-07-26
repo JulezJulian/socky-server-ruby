@@ -28,7 +28,6 @@ module Socky
         @name = name
         @secret = secret
         @webhook_url = webhook_url
-        puts 'new application: ' + @name + ' and secret ' + @secret
         @webhook_handler = WebhookHandler.new(self)
         self.class.list[name] ||= self
       end
