@@ -49,12 +49,10 @@ module Socky
         log('connection closing', @id)
         if @application
             @application.webhook_handler.group do |handler|
-              handler.group do
-                self.channels.values.each do |channel|
-                  channel.remove_subscriber(self)
-                end
+              self.channels.values.each do |channel|
+                channel.remove_subscriber(self)
               end
-            handler.trigger('client_disconnected', { connection_id: @id })
+              handler.trigger('client_disconnected', { connection_id: @id })
           end
           @application.remove_connection(self)
           @application = nil
