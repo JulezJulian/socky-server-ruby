@@ -52,7 +52,7 @@ module Socky
       end
 
       def check_channel
-        error = ConnectionError.new 'No channel provided...' + @app.to_s
+        error = ConnectionError.new 'No channel provided...' + app.to_s + '!!!'
         error.status = 400
 
         raise error unless @params['channel']
