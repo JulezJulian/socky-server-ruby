@@ -24,7 +24,7 @@ module Socky
       # @param [String] name application name
       # @param [String] secret application secret key
       # @param [String] webhook url
-      def initialize(name, secret, webhook_url)
+      def initialize(name, secret, webhook_url = nil)
         @name = name
         @secret = secret
         @webhook_url = webhook_url

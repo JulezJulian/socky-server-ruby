@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Socky::Server::Config do
-  
+
   context "#debug" do
     it "should enable logger when true provided" do
       Socky::Server::Logger.should_receive(:enabled=).with(true)
@@ -12,25 +12,25 @@ describe Socky::Server::Config do
       described_class.new(:debug => false)
     end
   end
-  
+
   context "#applications" do
     it "should raise if param is not hash" do
       lambda { described_class.new(:applications => "invalid") }.should raise_error ArgumentError, 'expected Hash'
     end
     it "should create application if hash provided" do
-      Socky::Server::Application.should_receive(:new).with('test_app','test_secret')
+      Socky::Server::Application.should_receive(:new).with('test_app','test_secret', nil)
       described_class.new(:applications => {'test_app' => 'test_secret'})
     end
     it "should convert application name to string if provided in other type" do
-      Socky::Server::Application.should_receive(:new).with('1','test_secret')
+      Socky::Server::Application.should_receive(:new).with('1','test_secret', nil)
       described_class.new(:applications => {1 => 'test_secret'})
     end
     it "should convert application secret to string if provided in other type" do
-      Socky::Server::Application.should_receive(:new).with('test_app','1')
+      Socky::Server::Application.should_receive(:new).with('test_app','1', nil)
       described_class.new(:applications => {'test_app' => 1})
     end
   end
-  
+
   context "#config_file" do
     it "should raise if non-string provided" do
       lambda { described_class.new(:config_file => 123) }.should raise_error ArgumentError, 'expected String'
@@ -43,7 +43,7 @@ describe Socky::Server::Config do
     end
     it "should read example config file and set attributes" do
       Socky::Server::Logger.should_receive(:enabled=).with(true)
-      Socky::Server::Application.should_receive(:new).with('some_test_app','some_test_secret')
+      Socky::Server::Application.should_receive(:new).with('some_test_app','some_test_secret', nil)
       described_class.new(:config_file => File.expand_path(File.dirname(__FILE__)) + '/../../../fixtures/example_config.yml')
     end
   end

@@ -29,9 +29,9 @@ module Socky
 
         arg.each do |app_name, options|
           if options.is_a?(Hash)
-            Socky::Server::Application.new(app_name.to_s, options['secret'], options['webhook_url'])
+            Socky::Server::Application.new(app_name.to_s, options['secret'].to_s, options['webhook_url'].to_s)
           else
-            Socky::Server::Application.new(app_name.to_s, options, nil)
+            Socky::Server::Application.new(app_name.to_s, options.to_s, nil)
           end
         end
       end
