@@ -6,7 +6,6 @@ module Socky
 
       # Each config key calls corresponding method with value as param
       def initialize(config = {})
-        puts 'initialozing with options: ' + config.to_s
         return unless config.is_a?(Hash)
 
         # Config file should be readed first
