@@ -21,6 +21,7 @@ module Socky
         log("received", @params)
 
         @app_name = request.path.split('/').last
+        @app = Application.find(@app_name)
 
         check_app
         check_channel
@@ -38,17 +39,13 @@ module Socky
         [ 500, {}, ['Unknown error'] ]
       end
 
-      private
-
-      def app
-        @app ||= Application.find(@app_name)
-      end
+private
 
       def check_app
         error = ConnectionError.new 'Application not found'
         error.status = 404
 
-        raise error if app.nil?
+        raise error if @app.nil?
       end
 
       def check_channel
@@ -81,7 +78,7 @@ module Socky
           :event => @params['event'],
           :data => @params['data']
         }, {
-          :secret => app.secret,
+          :secret => @app.secret,
           :method => :http
         })
         authenticator.salt = @params['auth'].split(':',2)[0]
