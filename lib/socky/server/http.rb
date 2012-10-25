@@ -5,14 +5,8 @@ module Socky
 
       class ConnectionError < RuntimeError; attr_accessor :status; end
 
-      DEFAULT_OPTIONS = {
-        :debug => false,
-        :timestamp_deviation => 10
-      }
-
       def initialize(options = {})
-        @options = DEFAULT_OPTIONS.merge(options)
-        Config.new(@options)
+        Config.new(options)
       end
 
       def call(env)
@@ -61,8 +55,8 @@ private
 
         timestamp = @params['timestamp'].to_i
         current_time = Time.now.to_i
-        min_time = current_time - (@options[:timestamp_deviation] * 60)
-        max_time = current_time + (@options[:timestamp_deviation] * 60)
+        min_time = current_time - (10 * 60)
+        max_time = current_time + (10 * 60)
 
         raise error unless timestamp > min_time && timestamp < max_time
       end
