@@ -80,10 +80,6 @@ Run file using Thin:
 $ thin -R config.ru -p3001 start
 ```
 
-## Setting other options
-
-Options like demonizing, logging to file, SSL support and others should be supported by Rack server like Thin. Socky Server is utilizing all of them so we will not describe them here.
-
 ## Which Rack servers are currently supported?
 
 All that are supported by [websocket-rack](http://github.com/imanel/websocket-rack). At the time of writing only Thin was supported, but it should change in near future. For the webhook extension an eventmachine loop is needed to process the http request. This works out of the box with Thin because Thin is based on eventmachine.
