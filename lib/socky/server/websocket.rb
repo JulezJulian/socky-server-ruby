@@ -8,9 +8,8 @@ module Socky
       def initialize(*args)
         super
 
-        log("Starting websocket Server", Socky::Server::VERSION)
-
         Config.new(@options)
+        log("Starting websocket Server", Socky::Server::VERSION)
       end
 
       # Called when connection is opened
