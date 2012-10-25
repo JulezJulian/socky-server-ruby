@@ -6,6 +6,7 @@ module Socky
       class ConnectionError < RuntimeError; attr_accessor :status; end
 
       def initialize(options = {})
+        log("Starting http Server", Socky::Server::VERSION)
         Config.new(options)
       end
 
