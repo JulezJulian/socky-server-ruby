@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.0 / 2012-22-11
+
+- Supports HTTP Callbacks: When a user connects/disconnects, a user joins/leaves a channel, a channel is occupied/vacated, the specified callback URL will be called. Callback URLs can be specified for each app seperately.
+- Some bug fixed (e.g. Debug Output not working, authentication not working with multiple apps configured, ...)
+
 ## 0.5.0 / 2012-02-16
 
 - Performance fixes - sending messages should be now 3-5 times faster(thanks to @piotrmarat)
